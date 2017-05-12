@@ -1,0 +1,30 @@
+{
+  "name": "hulk-mailer",
+  "version": "1.0.0",
+  "description": "Hulk Falls but never fails! `hulk-mailer` allows to add multiple ESPs to minimize email delivery failures.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --timeout 2000000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anthonyj7458/hulk-mailer.git"
+  },
+  "keywords": [
+    "ses",
+    "sendgrid",
+    "mailgun",
+    "mandrill"
+  ],
+  "author": "Joseph Anthony",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anthonyj7458/hulk-mailer/issues"
+  },
+  "homepage": "https://github.com/anthonyj7458/hulk-mailer#readme",
+  "dependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.3.0",
+    "request": "^2.81.0"
+  }
+}
