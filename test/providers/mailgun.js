@@ -4,13 +4,9 @@ var Email = require("../../lib/email");
 var BaseProvider = require("../../lib/providers/baseProvider");
 var Mailgun = require("../../lib/providers/mailgun");
 
-var provider, email;
+var provider;
 
 describe("Mailgun", function() {
-
-  before(function() {
-    email = new Email(config.email);
-  });
 
   describe("new Mailgun()", function() {
     it("should raise error if config is not passed", function(done) {
@@ -99,6 +95,12 @@ describe("Mailgun", function() {
     });
 
     it("should return form data in JS object", function(done) {
+      var email = new Email({
+        "from": "anthonyj7458@gmail.com",
+        "to": "anthonyj7458@gmail.com",
+        "subject": "Hello Joseph Anthony",
+        "text": "Congratulations Joseph Anthony, you just sent an email!"
+      });
       var formdata = provider._prepareFormData(email);
       chai.expect(formdata).to.be.a("object");
       chai.expect(formdata).to.include.keys("from", "to", "subject", "text");
@@ -113,6 +115,12 @@ describe("Mailgun", function() {
 
   describe("_prepareRequest()", function() {
     it("should return options JS object for request.js", function(done) {
+      var email = new Email({
+        "from": "anthonyj7458@gmail.com",
+        "to": "anthonyj7458@gmail.com",
+        "subject": "Hello Joseph Anthony",
+        "text": "Congratulations Joseph Anthony, you just sent an email!"
+      });
       var request = provider._prepareRequest(email);
       chai.expect(request).to.be.a("object");
       chai.expect(request).to.include.keys("method", "url", "auth", "headers", "form");
@@ -140,6 +148,12 @@ describe("Mailgun", function() {
 
   describe("send()", function() {
     it("should send email", function(done) {
+      var email = new Email({
+        "from": "anthonyj7458@gmail.com",
+        "to": "anthonyj7458@gmail.com",
+        "subject": "Hello Joseph Anthony",
+        "text": "Congratulations Joseph Anthony, you just sent an email!"
+      });
       provider.send(email, function(error, data) {
         if(error)
           return done(error);
