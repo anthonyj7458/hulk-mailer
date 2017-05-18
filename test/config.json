@@ -3,12 +3,10 @@
     "mailgun": {
       "apiKey": "key-imagined",
       "domain": "sandboxed.domain.mailgun.org"
+    },
+    "sendgrid": {
+      "username": "sandboxed",
+      "password": "sandboxedkey"
     }
-  },
-  "email": {
-    "from": "anthonyj7458@gmail.com",
-    "to": "anthonyj7458@gmail.com",
-    "subject": "Hello Joseph Anthony",
-    "text": "Congratulations Joseph Anthony, you just sent an email!"
   }
 }
