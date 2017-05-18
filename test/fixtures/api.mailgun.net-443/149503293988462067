@@ -1,0 +1,22 @@
+POST /v3/sandboxed.domain.mailgun.org/messages
+content-type: application/x-www-form-urlencoded
+host: api.mailgun.net
+authorization: Basic YXBpOmtleS1pbWFnaW5lZA==
+body: from=%3Canthonyj7458%40gmail.com%3E&to=%3Canthonyj7458%40gmail.com%3E&subject=Hello%20Joseph%20Anthony&text=Congratulations%20Joseph%20Anthony%2C%20you%20just%20sent%20an%20email%21
+
+HTTP/1.1 200 OK
+access-control-allow-headers: Content-Type, x-requested-with
+access-control-allow-methods: GET, POST, PUT, DELETE, OPTIONS
+access-control-allow-origin: *
+access-control-max-age: 600
+content-disposition: inline
+content-type: application/json
+date: Wed, 17 May 2017 14:55:39 GMT
+server: nginx
+content-length: 138
+connection: Close
+
+{
+  "id": "<20170217345531.63299.78567.9743E4DC@sandboxed.domain.mailgun.org>",
+  "message": "Queued. Thank you."
+}

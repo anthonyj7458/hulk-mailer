@@ -1,5 +1,10 @@
 {
-  "providers": {},
+  "providers": {
+    "mailgun": {
+      "apiKey": "key-imagined",
+      "domain": "sandboxed.domain.mailgun.org"
+    }
+  },
   "email": {
     "from": "anthonyj7458@gmail.com",
     "to": "anthonyj7458@gmail.com",
