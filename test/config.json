@@ -1,0 +1,9 @@
+{
+  "providers": {},
+  "email": {
+    "from": "anthonyj7458@gmail.com",
+    "to": "anthonyj7458@gmail.com",
+    "subject": "Hello Joseph Anthony",
+    "text": "Congratulations Joseph Anthony, you just sent an email!"
+  }
+}
