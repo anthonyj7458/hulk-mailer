@@ -1,0 +1,18 @@
+POST /api/1.0/messages/send.json
+content-type: application/x-www-form-urlencoded
+host: mandrillapp.com
+body: key=sandboxedkey&message%5Bfrom_email%5D=anthonyj7458%40gmail.com&message%5Bto%5D%5B0%5D%5Bemail%5D=anthonyj7458%40gmail.com&message%5Bto%5D%5B0%5D%5Btype%5D=to&message%5Bto%5D%5B1%5D%5Bemail%5D=anthonyj7458%2B1%40gmail.com&message%5Bto%5D%5B1%5D%5Btype%5D=to&message%5Bto%5D%5B2%5D%5Bemail%5D=anthonyj7458%2B2%40gmail.com&message%5Bto%5D%5B2%5D%5Btype%5D=cc&message%5Bsubject%5D=Hello%20Joseph%20Anthony&message%5Btext%5D=Congratulations%20Joseph%20Anthony%2C%20you%20just%20sent%20an%20email%21
+
+HTTP/1.1 200 OK
+server: nginx/1.6.3
+date: Thu, 18 May 2017 16:27:34 GMT
+content-type: application/json; charset=utf-8
+transfer-encoding: chunked
+connection: close
+vary: Accept-Encoding
+access-control-allow-origin: *
+access-control-allow-methods: POST, GET, OPTIONS
+access-control-allow-headers: Content-Type
+access-control-allow-credentials: false
+
+[{"email":"anthonyj7458@gmail.com","status":"sent","_id":"e38407f2af944a72b42cbda1f4f13f8a","reject_reason":null},{"email":"anthonyj7458%2B1@gmail.com","status":"sent","_id":"e5fca9381300481b929b6bfd0a3abec0","reject_reason":null},{"email":"anthonyj7458%2B2@gmail.com","status":"sent","_id":"fdb28fe4fbcf4cefb7be024d2e078006","reject_reason":null}]

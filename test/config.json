@@ -4,6 +4,9 @@
       "apiKey": "key-imagined",
       "domain": "sandboxed.domain.mailgun.org"
     },
+    "mandrill": {
+      "apiKey": "sandboxedkey"
+    },
     "sendgrid": {
       "username": "sandboxed",
       "password": "sandboxedkey"
