@@ -14,7 +14,7 @@ describe("Mandrill", function() {
         provider = new Mandrill();
         done("the test case should fail");
       } catch(error) {
-        chai.expect(error.message).to.be.equal("Settings for mandrill is required. is required.");
+        chai.expect(error.message).to.be.equal("Settings for mandrill is required.");
         done();
       }
     });

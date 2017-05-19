@@ -14,7 +14,7 @@ describe("Sendgrid", function() {
         provider = new Sendgrid();
         done("the test case should fail");
       } catch(error) {
-        chai.expect(error.message).to.be.equal("Settings for sendgrid is required. is required.");
+        chai.expect(error.message).to.be.equal("Settings for sendgrid is required.");
         done();
       }
     });

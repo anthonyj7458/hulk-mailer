@@ -14,7 +14,7 @@ describe("Mailgun", function() {
         provider = new Mailgun();
         done("the test case should fail");
       } catch(error) {
-        chai.expect(error.message).to.be.equal("Settings for mailgun is required. is required.");
+        chai.expect(error.message).to.be.equal("Settings for mailgun is required.");
         done();
       }
     });
