@@ -10,6 +10,11 @@
     "sendgrid": {
       "username": "sandboxed",
       "password": "sandboxedkey"
+    },
+    "ses": {
+      "accessKeyId": "sandboxedkey",
+      "secretAccessKey": "sandboxedAccesskey",
+      "region": "us-east-1"
     }
   }
 }
