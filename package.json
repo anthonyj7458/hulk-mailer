@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/anthonyj7458/hulk-mailer#readme",
   "dependencies": {
+    "async": "^2.4.0",
     "aws-sdk": "^2.53.0",
     "chai": "^3.5.0",
     "email-validator": "^1.0.7",
