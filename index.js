@@ -5,7 +5,7 @@ var manager;
 
 var isManagerCreated = function() {
   if(!manager)
-    throw new Error("Manager should should be created first.");
+    throw new Error("HulkMailer not initialized. Use HulkMailer.init(config)");
 }
 
 var addNewProvider = function(settings) {
@@ -16,6 +16,9 @@ var addNewProvider = function(settings) {
 exports.addNewProvider = addNewProvider;
 
 exports.init = function(config) {
+  if(!_.isArray(config) || !_.every(config, _.isObject)) {
+    throw new Error("Invalid configuration object passed.");
+  }
   manager = new EmailProviderManager();
   _.forEach(config, addNewProvider);
 }
