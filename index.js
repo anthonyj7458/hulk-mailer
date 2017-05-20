@@ -34,9 +34,9 @@ HulkMailer.init = function(config) {
   _.forEach(config, addNewProvider);
 }
 
-HulkMailer.send = function(email) {
+HulkMailer.send = function(email, sent) {
   isInitialized();
-  manager.send(email);
+  manager.send(email, sent);
 }
 
 HulkMailer.Email = require("./lib/email");
