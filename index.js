@@ -3,6 +3,8 @@ var EmailProviderManager = require("./lib/manager");
 
 var manager;
 
+function HulkMailer() {}
+
 var isManagerCreated = function() {
   if(!manager)
     throw new Error("HulkMailer not initialized. Use HulkMailer.init(config)");
@@ -13,9 +15,9 @@ var addNewProvider = function(settings) {
   manager.registerProvider(settings);
 };
 
-exports.addNewProvider = addNewProvider;
+HulkMailer.addNewProvider = addNewProvider;
 
-exports.init = function(config) {
+HulkMailer.init = function(config) {
   if(!_.isArray(config) || !_.every(config, _.isObject)) {
     throw new Error("Invalid configuration object passed.");
   }
@@ -23,9 +25,11 @@ exports.init = function(config) {
   _.forEach(config, addNewProvider);
 }
 
-exports.send = function(email) {
+HulkMailer.send = function(email) {
   isManagerCreated();
   manager.send(email);
 }
 
-exports.Email = require("./lib/email");
+HulkMailer.Email = require("./lib/email");
+
+module.exports = HulkMailer;

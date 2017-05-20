@@ -62,7 +62,12 @@ const config = [
 
 Initialize your config.
 ```js
+// ES5
 var HulkMailer = require('hulk-mailer');
+HulkMailer.init(config);
+
+// ES6
+import HulkMailer from 'hulk-mailer';
 HulkMailer.init(config);
 ```
 
