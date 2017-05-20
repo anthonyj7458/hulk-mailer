@@ -1,20 +1,33 @@
 {
-  "providers": {
-    "mailgun": {
+  "email_providers": [
+    {
+      "name": "ironman",
+      "provider": "mailgun",
       "apiKey": "key-imagined",
       "domain": "sandboxed.domain.mailgun.org"
     },
-    "mandrill": {
+    {
+      "name": "thor",
+      "provider": "mandrill",
       "apiKey": "sandboxedkey"
     },
-    "sendgrid": {
+    {
+      "name": "hawkeye",
+      "provider": "sendgrid",
       "username": "sandboxed",
       "password": "sandboxedkey"
     },
-    "ses": {
+    {
+      "name": "captainamerica",
+      "provider": "ses",
       "accessKeyId": "sandboxedkey",
       "secretAccessKey": "sandboxedAccesskey",
       "region": "us-east-1"
     }
+  ],
+  "new_provider": {
+    "name": "loki",
+    "provider": "mandrill",
+    "apiKey": "sandboxedkey"
   }
 }

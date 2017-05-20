@@ -3,6 +3,8 @@ var config = require("../config");
 var Email = require("../../lib/email");
 var BaseProvider = require("../../lib/providers/baseProvider");
 var Sendgrid = require("../../lib/providers/sendgrid");
+var ParameterInvalidError = require("../../lib/errors/parameterInvalidError");
+var ParameterRequiredError = require("../../lib/errors/parameterRequiredError");
 
 var provider;
 
@@ -14,6 +16,9 @@ describe("Sendgrid", function() {
         provider = new Sendgrid();
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterRequiredError);
+        chai.expect(error).to.have.property("code", "PARAM_REQUIRED");
         chai.expect(error.message).to.be.equal("Settings for sendgrid is required.");
         done();
       }
@@ -24,6 +29,9 @@ describe("Sendgrid", function() {
         provider = new Sendgrid({});
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterRequiredError);
+        chai.expect(error).to.have.property("code", "PARAM_REQUIRED");
         chai.expect(error.message).to.be.equal("username is required.");
         done();
       }
@@ -34,6 +42,9 @@ describe("Sendgrid", function() {
         provider = new Sendgrid({ username: {} });
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterInvalidError);
+        chai.expect(error).to.have.property("code", "PARAM_INVALID");
         chai.expect(error.message).to.be.equal("username should be a string.");
         done();
       }
@@ -44,6 +55,9 @@ describe("Sendgrid", function() {
         provider = new Sendgrid({ username: "xyz" });
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterRequiredError);
+        chai.expect(error).to.have.property("code", "PARAM_REQUIRED");
         chai.expect(error.message).to.be.equal("password is required.");
         done();
       }
@@ -54,13 +68,16 @@ describe("Sendgrid", function() {
         provider = new Sendgrid({ username: "xyz", password: {} });
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterInvalidError);
+        chai.expect(error).to.have.property("code", "PARAM_INVALID");
         chai.expect(error.message).to.be.equal("password should be a string.");
         done();
       }
     });
 
     it("should create provider object", function(done) {
-      provider = new Sendgrid(config.providers.sendgrid);
+      provider = new Sendgrid(config.email_providers[2]);
       chai.expect(provider).to.be.instanceof(Sendgrid);
       chai.expect(provider).to.be.instanceof(BaseProvider);
       chai.expect(provider).to.respondTo("_prepareFormData");
@@ -79,6 +96,9 @@ describe("Sendgrid", function() {
         provider._prepareFormData();
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterInvalidError);
+        chai.expect(error).to.have.property("code", "PARAM_INVALID");
         chai.expect(error.message).to.be.equal("`email` should be of an object of prototype HulkMailer.Email");
         done();
       }

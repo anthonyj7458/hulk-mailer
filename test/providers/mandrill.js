@@ -3,6 +3,8 @@ var config = require("../config");
 var Email = require("../../lib/email");
 var BaseProvider = require("../../lib/providers/baseProvider");
 var Mandrill = require("../../lib/providers/mandrill");
+var ParameterInvalidError = require("../../lib/errors/parameterInvalidError");
+var ParameterRequiredError = require("../../lib/errors/parameterRequiredError");
 
 var provider;
 
@@ -14,6 +16,9 @@ describe("Mandrill", function() {
         provider = new Mandrill();
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterRequiredError);
+        chai.expect(error).to.have.property("code", "PARAM_REQUIRED");
         chai.expect(error.message).to.be.equal("Settings for mandrill is required.");
         done();
       }
@@ -24,6 +29,9 @@ describe("Mandrill", function() {
         provider = new Mandrill({});
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterRequiredError);
+        chai.expect(error).to.have.property("code", "PARAM_REQUIRED");
         chai.expect(error.message).to.be.equal("apiKey is required.");
         done();
       }
@@ -34,13 +42,16 @@ describe("Mandrill", function() {
         provider = new Mandrill({ apiKey: {} });
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterInvalidError);
+        chai.expect(error).to.have.property("code", "PARAM_INVALID");
         chai.expect(error.message).to.be.equal("apiKey should be a string.");
         done();
       }
     });
 
     it("should create provider object", function(done) {
-      provider = new Mandrill(config.providers.mandrill);
+      provider = new Mandrill(config.email_providers[1]);
       chai.expect(provider).to.be.instanceof(Mandrill);
       chai.expect(provider).to.be.instanceof(BaseProvider);
       chai.expect(provider).to.respondTo("_prepareToField");
@@ -98,6 +109,9 @@ describe("Mandrill", function() {
         provider._prepareFormData();
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterInvalidError);
+        chai.expect(error).to.have.property("code", "PARAM_INVALID");
         chai.expect(error.message).to.be.equal("`email` should be of an object of prototype HulkMailer.Email");
         done();
       }

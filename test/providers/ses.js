@@ -3,14 +3,12 @@ var config = require("../config");
 var Email = require("../../lib/email");
 var BaseProvider = require("../../lib/providers/baseProvider");
 var SES = require("../../lib/providers/ses");
+var ParameterInvalidError = require("../../lib/errors/parameterInvalidError");
+var ParameterRequiredError = require("../../lib/errors/parameterRequiredError");
 
 var provider;
 
 describe("SES", function() {
-
-  before(function() {
-    provider = new SES(config.providers.ses);
-  });
 
   describe("new SES()", function() {
     it("should raise error if config is not passed", function(done) {
@@ -18,6 +16,9 @@ describe("SES", function() {
         provider = new SES();
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterRequiredError);
+        chai.expect(error).to.have.property("code", "PARAM_REQUIRED");
         chai.expect(error.message).to.be.equal("Settings for ses is required.");
         done();
       }
@@ -28,6 +29,9 @@ describe("SES", function() {
         provider = new SES({});
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterRequiredError);
+        chai.expect(error).to.have.property("code", "PARAM_REQUIRED");
         chai.expect(error.message).to.be.equal("accessKeyId is required.");
         done();
       }
@@ -38,6 +42,9 @@ describe("SES", function() {
         provider = new SES({ accessKeyId: {} });
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterInvalidError);
+        chai.expect(error).to.have.property("code", "PARAM_INVALID");
         chai.expect(error.message).to.be.equal("accessKeyId should be a string.");
         done();
       }
@@ -48,6 +55,9 @@ describe("SES", function() {
         provider = new SES({ accessKeyId: "xyz" });
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterRequiredError);
+        chai.expect(error).to.have.property("code", "PARAM_REQUIRED");
         chai.expect(error.message).to.be.equal("secretAccessKey is required.");
         done();
       }
@@ -58,6 +68,9 @@ describe("SES", function() {
         provider = new SES({ accessKeyId: "xyz", secretAccessKey: {} });
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterInvalidError);
+        chai.expect(error).to.have.property("code", "PARAM_INVALID");
         chai.expect(error.message).to.be.equal("secretAccessKey should be a string.");
         done();
       }
@@ -68,6 +81,9 @@ describe("SES", function() {
         provider = new SES({ accessKeyId: "xyz", secretAccessKey: "xyz" });
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterRequiredError);
+        chai.expect(error).to.have.property("code", "PARAM_REQUIRED");
         chai.expect(error.message).to.be.equal("region is required.");
         done();
       }
@@ -78,13 +94,16 @@ describe("SES", function() {
         provider = new SES({ accessKeyId: "xyz", secretAccessKey: "xyz", region: {} });
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterInvalidError);
+        chai.expect(error).to.have.property("code", "PARAM_INVALID");
         chai.expect(error.message).to.be.equal("region should be a string.");
         done();
       }
     });
 
     it("should create provider object", function(done) {
-      provider = new SES(config.providers.ses);
+      provider = new SES(config.email_providers[3]);
       chai.expect(provider).to.be.instanceof(SES);
       chai.expect(provider).to.be.instanceof(BaseProvider);
       chai.expect(provider).to.respondTo("_prepareRequest");
@@ -99,6 +118,9 @@ describe("SES", function() {
         provider._prepareRequest();
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterInvalidError);
+        chai.expect(error).to.have.property("code", "PARAM_INVALID");
         chai.expect(error.message).to.be.equal("`email` should be of an object of prototype HulkMailer.Email");
         done();
       }
@@ -158,5 +180,3 @@ describe("SES", function() {
     });
   });
 });
-
-

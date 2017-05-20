@@ -3,6 +3,8 @@ var config = require("../config");
 var Email = require("../../lib/email");
 var BaseProvider = require("../../lib/providers/baseProvider");
 var Mailgun = require("../../lib/providers/mailgun");
+var ParameterInvalidError = require("../../lib/errors/parameterInvalidError");
+var ParameterRequiredError = require("../../lib/errors/parameterRequiredError");
 
 var provider;
 
@@ -14,6 +16,9 @@ describe("Mailgun", function() {
         provider = new Mailgun();
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterRequiredError);
+        chai.expect(error).to.have.property("code", "PARAM_REQUIRED");
         chai.expect(error.message).to.be.equal("Settings for mailgun is required.");
         done();
       }
@@ -24,6 +29,9 @@ describe("Mailgun", function() {
         provider = new Mailgun({});
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterRequiredError);
+        chai.expect(error).to.have.property("code", "PARAM_REQUIRED");
         chai.expect(error.message).to.be.equal("apiKey is required.");
         done();
       }
@@ -34,6 +42,9 @@ describe("Mailgun", function() {
         provider = new Mailgun({ apiKey: {} });
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterInvalidError);
+        chai.expect(error).to.have.property("code", "PARAM_INVALID");
         chai.expect(error.message).to.be.equal("apiKey should be a string.");
         done();
       }
@@ -44,6 +55,9 @@ describe("Mailgun", function() {
         provider = new Mailgun({ apiKey: "xyz" });
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterRequiredError);
+        chai.expect(error).to.have.property("code", "PARAM_REQUIRED");
         chai.expect(error.message).to.be.equal("domain is required.");
         done();
       }
@@ -54,6 +68,9 @@ describe("Mailgun", function() {
         provider = new Mailgun({ apiKey: "xyz", domain: {} });
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterInvalidError);
+        chai.expect(error).to.have.property("code", "PARAM_INVALID");
         chai.expect(error.message).to.be.equal("domain should be a string.");
         done();
       }
@@ -64,13 +81,16 @@ describe("Mailgun", function() {
         provider = new Mailgun({ apiKey: "xyz", domain: "xyz" });
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterInvalidError);
+        chai.expect(error).to.have.property("code", "PARAM_INVALID");
         chai.expect(error.message).to.be.equal("apiKey should start with key-");
         done();
       }
     });
 
     it("should create provider object", function(done) {
-      provider = new Mailgun(config.providers.mailgun);
+      provider = new Mailgun(config.email_providers[0]);
       chai.expect(provider).to.be.instanceof(Mailgun);
       chai.expect(provider).to.be.instanceof(BaseProvider);
       chai.expect(provider).to.respondTo("_prepareFormData");
@@ -89,6 +109,9 @@ describe("Mailgun", function() {
         provider._prepareFormData();
         done("the test case should fail");
       } catch(error) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ParameterInvalidError);
+        chai.expect(error).to.have.property("code", "PARAM_INVALID");
         chai.expect(error.message).to.be.equal("`email` should be of an object of prototype HulkMailer.Email");
         done();
       }
