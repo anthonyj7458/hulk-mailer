@@ -1,6 +1,6 @@
 {
   "name": "hulk-mailer",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Hulk Falls but never fails! `hulk-mailer` allows to add multiple ESPs to minimize email delivery failures.",
   "main": "index.js",
   "scripts": {
