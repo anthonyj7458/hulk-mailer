@@ -6,6 +6,20 @@
   "scripts": {
     "test": "mocha --timeout 200000"
   },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.3.0",
+    "replay": "^2.1.2",
+    "sinon": "^2.2.0"
+  },
+  "dependencies": {
+    "async": "^2.4.0",
+    "aws-sdk": "^2.53.0",
+    "email-validator": "^1.0.7",
+    "lodash": "^4.17.4",
+    "request": "^2.81.0",
+    "require-dir": "^0.3.1"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/anthonyj7458/hulk-mailer.git"
@@ -21,17 +35,5 @@
   "bugs": {
     "url": "https://github.com/anthonyj7458/hulk-mailer/issues"
   },
-  "homepage": "https://github.com/anthonyj7458/hulk-mailer#readme",
-  "dependencies": {
-    "async": "^2.4.0",
-    "aws-sdk": "^2.53.0",
-    "chai": "^3.5.0",
-    "email-validator": "^1.0.7",
-    "lodash": "^4.17.4",
-    "mocha": "^3.3.0",
-    "replay": "^2.1.2",
-    "request": "^2.81.0",
-    "require-dir": "^0.3.1",
-    "sinon": "^2.2.0"
-  }
+  "homepage": "https://github.com/anthonyj7458/hulk-mailer#readme"
 }
