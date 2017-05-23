@@ -87,7 +87,7 @@ HulkMailer.removeProvider('loki');
 
 ### Create and send your Email
 ```js
-const email = new Email({
+const email = new HulkMailer.Email({
   "from": "anthonyj7458@gmail.com",
   "to": "anthonyj7458@gmail.com",
   "subject": "Hello Joseph Anthony",
@@ -99,4 +99,4 @@ HulkMailer.send(email);
 ### See our own [Implementation](https://github.com/anthonyj7458/hulk-service)
 
 ## Want to contribute
-[Fork](https://github.com/anthonyj7458/hulk-mailer) us on github.
+Fork us on [github](https://github.com/anthonyj7458/hulk-mailer).

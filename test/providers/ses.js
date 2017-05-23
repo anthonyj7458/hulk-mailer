@@ -172,9 +172,10 @@ describe("SES", function() {
         "subject": "Hello Joseph Anthony",
         "text": "Congratulations Joseph Anthony, you just sent an email!"
       });
-      provider.send(email, function(error, data) {
-        if(error)
-          return done(error);
+      provider.send(email, function(result) {
+        if(result.error)
+          return done(result.error);
+        chai.expect(result.success).to.equal(true);
         return done();
       });
     });

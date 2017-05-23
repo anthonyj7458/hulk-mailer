@@ -25,9 +25,10 @@ describe('HulkMailer.send()', function() {
       "subject": "Hello Joseph Anthony",
       "text": "Congratulations Joseph Anthony, you just sent an email!"
     });
-    HulkMailer.send(email, function(error, data) {
-      if(error)
-        return done(error);
+    HulkMailer.send(email, function(result) {
+      if(result.error)
+        return done(result.error);
+      chai.expect(result.success).to.equal(true);
       return done();
     });
   });
