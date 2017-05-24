@@ -1,15 +1,18 @@
+var _ = require("lodash");
 var chai = require("chai");
 var config = require("../config");
 var Email = require("../../lib/email");
 var BaseProvider = require("../../lib/providers/baseProvider");
 var Mandrill = require("../../lib/providers/mandrill");
+var ForbiddenError = require("../../lib/errors/forbiddenError");
+var BadRequestError = require("../../lib/errors/badRequestError");
 var ParameterInvalidError = require("../../lib/errors/parameterInvalidError");
 var ParameterRequiredError = require("../../lib/errors/parameterRequiredError");
+var ConfigurationInvalidError = require("../../lib/errors/configurationInvalidError");
 
 var provider;
 
 describe("Mandrill", function() {
-
   describe("new Mandrill()", function() {
     it("should raise error if config is not passed", function(done) {
       try {
@@ -17,7 +20,9 @@ describe("Mandrill", function() {
         done("the test case should fail");
       } catch(error) {
         chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(BadRequestError);
         chai.expect(error).to.be.instanceof(ParameterRequiredError);
+        chai.expect(error).to.have.property("status", 400);
         chai.expect(error).to.have.property("code", "PARAM_REQUIRED");
         chai.expect(error.message).to.be.equal("Settings for mandrill is required.");
         done();
@@ -30,7 +35,9 @@ describe("Mandrill", function() {
         done("the test case should fail");
       } catch(error) {
         chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(BadRequestError);
         chai.expect(error).to.be.instanceof(ParameterRequiredError);
+        chai.expect(error).to.have.property("status", 400);
         chai.expect(error).to.have.property("code", "PARAM_REQUIRED");
         chai.expect(error.message).to.be.equal("apiKey is required.");
         done();
@@ -43,7 +50,9 @@ describe("Mandrill", function() {
         done("the test case should fail");
       } catch(error) {
         chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(BadRequestError);
         chai.expect(error).to.be.instanceof(ParameterInvalidError);
+        chai.expect(error).to.have.property("status", 400);
         chai.expect(error).to.have.property("code", "PARAM_INVALID");
         chai.expect(error.message).to.be.equal("apiKey should be a string.");
         done();
@@ -58,7 +67,8 @@ describe("Mandrill", function() {
       chai.expect(provider).to.respondTo("_prepareFormData");
       chai.expect(provider).to.respondTo("_prepareRequest");
       chai.expect(provider).to.respondTo("send");
-      chai.expect(provider).to.have.property("name", "mandrill");
+      chai.expect(provider).to.have.property("name", "thor");
+      chai.expect(provider).to.have.property("provider", "mandrill");
       chai.expect(provider).to.have.property("apiKey", "sandboxedkey");
       done();
     });
@@ -110,7 +120,9 @@ describe("Mandrill", function() {
         done("the test case should fail");
       } catch(error) {
         chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(BadRequestError);
         chai.expect(error).to.be.instanceof(ParameterInvalidError);
+        chai.expect(error).to.have.property("status", 400);
         chai.expect(error).to.have.property("code", "PARAM_INVALID");
         chai.expect(error.message).to.be.equal("`email` should be of an object of prototype HulkMailer.Email");
         done();
@@ -196,7 +208,27 @@ describe("Mandrill", function() {
   });
 
   describe("send()", function() {
-    it("should send email", function(done) {
+    it("should forbid if incorrect configurations passed", function(done) {
+      var invalidProvider = new Mandrill(_.chain(config.email_providers[1]).clone().assign({ "apiKey": "key-incorrect" }).value());
+      var email = new Email({
+        "from": "anthonyj7458@gmail.com",
+        "to": "anthonyj7458+1@gmail.com",
+        "subject": "Hello Joseph Anthony",
+        "text": "Congratulations Joseph Anthony, you just sent an email!"
+      });
+      invalidProvider.send(email, function(error, success) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ForbiddenError);
+        chai.expect(error).to.be.instanceof(ConfigurationInvalidError);
+        chai.expect(error).to.have.property("code", "CONFIG_INVALID");
+        chai.expect(error).to.have.property("status", 401);
+        chai.expect(error.message).to.be.equal("Configurations for [thor] is forbidden.");
+        chai.expect(success).to.equal(false);
+        done();
+      });
+    });
+
+    it("should send Email", function(done) {
       var email = new Email({
         "from": "anthonyj7458@gmail.com",
         "to": ["anthonyj7458@gmail.com", "anthonyj7458+1@gmail.com"],
@@ -204,11 +236,10 @@ describe("Mandrill", function() {
         "subject": "Hello Joseph Anthony",
         "text": "Congratulations Joseph Anthony, you just sent an email!"
       });
-      provider.send(email, function(result) {
-        if(result.error)
-          return done(result.error);
-        chai.expect(result.success).to.equal(true);
-        return done();
+      provider.send(email, function(error, success) {
+        chai.expect(error).to.equal(null);
+        chai.expect(success).to.equal(true);
+        done();
       });
     });
   });

@@ -3,13 +3,15 @@ var config = require("../config");
 var Email = require("../../lib/email");
 var BaseProvider = require("../../lib/providers/baseProvider");
 var SES = require("../../lib/providers/ses");
+var ForbiddenError = require("../../lib/errors/forbiddenError");
+var BadRequestError = require("../../lib/errors/badRequestError");
 var ParameterInvalidError = require("../../lib/errors/parameterInvalidError");
 var ParameterRequiredError = require("../../lib/errors/parameterRequiredError");
+var ConfigurationInvalidError = require("../../lib/errors/configurationInvalidError");
 
 var provider;
 
 describe("SES", function() {
-
   describe("new SES()", function() {
     it("should raise error if config is not passed", function(done) {
       try {
@@ -17,8 +19,10 @@ describe("SES", function() {
         done("the test case should fail");
       } catch(error) {
         chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(BadRequestError);
         chai.expect(error).to.be.instanceof(ParameterRequiredError);
         chai.expect(error).to.have.property("code", "PARAM_REQUIRED");
+        chai.expect(error).to.have.property("status", 400);
         chai.expect(error.message).to.be.equal("Settings for ses is required.");
         done();
       }
@@ -30,8 +34,10 @@ describe("SES", function() {
         done("the test case should fail");
       } catch(error) {
         chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(BadRequestError);
         chai.expect(error).to.be.instanceof(ParameterRequiredError);
         chai.expect(error).to.have.property("code", "PARAM_REQUIRED");
+        chai.expect(error).to.have.property("status", 400);
         chai.expect(error.message).to.be.equal("accessKeyId is required.");
         done();
       }
@@ -43,8 +49,10 @@ describe("SES", function() {
         done("the test case should fail");
       } catch(error) {
         chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(BadRequestError);
         chai.expect(error).to.be.instanceof(ParameterInvalidError);
         chai.expect(error).to.have.property("code", "PARAM_INVALID");
+        chai.expect(error).to.have.property("status", 400);
         chai.expect(error.message).to.be.equal("accessKeyId should be a string.");
         done();
       }
@@ -56,8 +64,10 @@ describe("SES", function() {
         done("the test case should fail");
       } catch(error) {
         chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(BadRequestError);
         chai.expect(error).to.be.instanceof(ParameterRequiredError);
         chai.expect(error).to.have.property("code", "PARAM_REQUIRED");
+        chai.expect(error).to.have.property("status", 400);
         chai.expect(error.message).to.be.equal("secretAccessKey is required.");
         done();
       }
@@ -69,8 +79,10 @@ describe("SES", function() {
         done("the test case should fail");
       } catch(error) {
         chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(BadRequestError);
         chai.expect(error).to.be.instanceof(ParameterInvalidError);
         chai.expect(error).to.have.property("code", "PARAM_INVALID");
+        chai.expect(error).to.have.property("status", 400);
         chai.expect(error.message).to.be.equal("secretAccessKey should be a string.");
         done();
       }
@@ -82,8 +94,10 @@ describe("SES", function() {
         done("the test case should fail");
       } catch(error) {
         chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(BadRequestError);
         chai.expect(error).to.be.instanceof(ParameterRequiredError);
         chai.expect(error).to.have.property("code", "PARAM_REQUIRED");
+        chai.expect(error).to.have.property("status", 400);
         chai.expect(error.message).to.be.equal("region is required.");
         done();
       }
@@ -95,8 +109,10 @@ describe("SES", function() {
         done("the test case should fail");
       } catch(error) {
         chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(BadRequestError);
         chai.expect(error).to.be.instanceof(ParameterInvalidError);
         chai.expect(error).to.have.property("code", "PARAM_INVALID");
+        chai.expect(error).to.have.property("status", 400);
         chai.expect(error.message).to.be.equal("region should be a string.");
         done();
       }
@@ -119,7 +135,9 @@ describe("SES", function() {
         done("the test case should fail");
       } catch(error) {
         chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(BadRequestError);
         chai.expect(error).to.be.instanceof(ParameterInvalidError);
+        chai.expect(error).to.have.property("status", 400);
         chai.expect(error).to.have.property("code", "PARAM_INVALID");
         chai.expect(error.message).to.be.equal("`email` should be of an object of prototype HulkMailer.Email");
         done();
@@ -142,11 +160,11 @@ describe("SES", function() {
       chai.expect(request.Destination).to.include.keys("CcAddresses", "ToAddresses");
       chai.expect(request.Destination.CcAddresses).to.be.a("Array");
       chai.expect(request.Destination.CcAddresses).to.have.length(1);
-      chai.expect(request.Destination.CcAddresses[0]).to.equal('anthonyj7458+2@gmail.com');
+      chai.expect(request.Destination.CcAddresses[0]).to.equal("anthonyj7458+2@gmail.com");
       chai.expect(request.Destination.ToAddresses).to.be.a("Array");
       chai.expect(request.Destination.ToAddresses).to.have.length(2);
-      chai.expect(request.Destination.ToAddresses[0]).to.equal('anthonyj7458@gmail.com');
-      chai.expect(request.Destination.ToAddresses[1]).to.equal('anthonyj7458+1@gmail.com');
+      chai.expect(request.Destination.ToAddresses[0]).to.equal("anthonyj7458@gmail.com");
+      chai.expect(request.Destination.ToAddresses[1]).to.equal("anthonyj7458+1@gmail.com");
       chai.expect(request.Message).to.be.a("object");
       chai.expect(request.Message).to.include.keys("Body", "Subject");
       chai.expect(request.Message.Body).to.be.a("object");
@@ -164,7 +182,57 @@ describe("SES", function() {
   });
 
   describe("send()", function() {
-    it("should send email", function(done) {
+    it("should forbid if incorrect configurations passed", function(done) {
+      var invalidProvider = new SES({
+        name: "captainamerica",
+        accessKeyId: "xyz",
+        secretAccessKey: "xyz",
+        region: "xyz"
+      });
+      var email = new Email({
+        "from": "anthonyj7458@gmail.com",
+        "to": "anthonyj7458+1@gmail.com",
+        "subject": "Hello Joseph Anthony",
+        "text": "Congratulations Joseph Anthony, you just sent an email!"
+      });
+      invalidProvider.send(email, function(error, success) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ForbiddenError);
+        chai.expect(error).to.be.instanceof(ConfigurationInvalidError);
+        chai.expect(error).to.have.property("code", "CONFIG_INVALID");
+        chai.expect(error).to.have.property("status", 401);
+        chai.expect(error.message).to.be.equal("Configurations for [captainamerica] is forbidden.");
+        chai.expect(success).to.equal(false);
+        done();
+      });
+    });
+
+    it("should forbid if incorrect configurations passed", function(done) {
+      var invalidProvider = new SES({
+        name: "captainamerica",
+        accessKeyId: "xyz",
+        secretAccessKey: "xyz",
+        region: "us-east-1"
+      });
+      var email = new Email({
+        "from": "anthonyj7458@gmail.com",
+        "to": "anthonyj7458+2@gmail.com",
+        "subject": "Hello Joseph Anthony",
+        "text": "Congratulations Joseph Anthony, you just sent an email!"
+      });
+      invalidProvider.send(email, function(error, success) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ForbiddenError);
+        chai.expect(error).to.be.instanceof(ConfigurationInvalidError);
+        chai.expect(error).to.have.property("code", "CONFIG_INVALID");
+        chai.expect(error).to.have.property("status", 401);
+        chai.expect(error.message).to.be.equal("Configurations for [captainamerica] is forbidden.");
+        chai.expect(success).to.equal(false);
+        done();
+      });
+    });
+
+    it("should send Email", function(done) {
       var email = new Email({
         "from": "anthonyj7458@gmail.com",
         "to": ["anthonyj7458@gmail.com", "anthonyj7458+1@gmail.com"],
@@ -172,11 +240,10 @@ describe("SES", function() {
         "subject": "Hello Joseph Anthony",
         "text": "Congratulations Joseph Anthony, you just sent an email!"
       });
-      provider.send(email, function(result) {
-        if(result.error)
-          return done(result.error);
-        chai.expect(result.success).to.equal(true);
-        return done();
+      provider.send(email, function(error, success) {
+        chai.expect(error).to.equal(null);
+        chai.expect(success).to.equal(true);
+        done();
       });
     });
   });

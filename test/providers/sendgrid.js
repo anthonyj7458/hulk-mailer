@@ -1,15 +1,18 @@
+var _ = require("lodash");
 var chai = require("chai");
 var config = require("../config");
 var Email = require("../../lib/email");
 var BaseProvider = require("../../lib/providers/baseProvider");
 var Sendgrid = require("../../lib/providers/sendgrid");
+var ForbiddenError = require("../../lib/errors/forbiddenError");
+var BadRequestError = require("../../lib/errors/badRequestError");
 var ParameterInvalidError = require("../../lib/errors/parameterInvalidError");
 var ParameterRequiredError = require("../../lib/errors/parameterRequiredError");
+var ConfigurationInvalidError = require("../../lib/errors/configurationInvalidError");
 
 var provider;
 
 describe("Sendgrid", function() {
-
   describe("new Sendgrid()", function() {
     it("should raise error if config is not passed", function(done) {
       try {
@@ -17,8 +20,10 @@ describe("Sendgrid", function() {
         done("the test case should fail");
       } catch(error) {
         chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(BadRequestError);
         chai.expect(error).to.be.instanceof(ParameterRequiredError);
         chai.expect(error).to.have.property("code", "PARAM_REQUIRED");
+        chai.expect(error).to.have.property("status", 400);
         chai.expect(error.message).to.be.equal("Settings for sendgrid is required.");
         done();
       }
@@ -30,8 +35,10 @@ describe("Sendgrid", function() {
         done("the test case should fail");
       } catch(error) {
         chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(BadRequestError);
         chai.expect(error).to.be.instanceof(ParameterRequiredError);
         chai.expect(error).to.have.property("code", "PARAM_REQUIRED");
+        chai.expect(error).to.have.property("status", 400);
         chai.expect(error.message).to.be.equal("username is required.");
         done();
       }
@@ -43,8 +50,10 @@ describe("Sendgrid", function() {
         done("the test case should fail");
       } catch(error) {
         chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(BadRequestError);
         chai.expect(error).to.be.instanceof(ParameterInvalidError);
         chai.expect(error).to.have.property("code", "PARAM_INVALID");
+        chai.expect(error).to.have.property("status", 400);
         chai.expect(error.message).to.be.equal("username should be a string.");
         done();
       }
@@ -56,8 +65,10 @@ describe("Sendgrid", function() {
         done("the test case should fail");
       } catch(error) {
         chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(BadRequestError);
         chai.expect(error).to.be.instanceof(ParameterRequiredError);
         chai.expect(error).to.have.property("code", "PARAM_REQUIRED");
+        chai.expect(error).to.have.property("status", 400);
         chai.expect(error.message).to.be.equal("password is required.");
         done();
       }
@@ -69,8 +80,10 @@ describe("Sendgrid", function() {
         done("the test case should fail");
       } catch(error) {
         chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(BadRequestError);
         chai.expect(error).to.be.instanceof(ParameterInvalidError);
         chai.expect(error).to.have.property("code", "PARAM_INVALID");
+        chai.expect(error).to.have.property("status", 400);
         chai.expect(error.message).to.be.equal("password should be a string.");
         done();
       }
@@ -83,7 +96,8 @@ describe("Sendgrid", function() {
       chai.expect(provider).to.respondTo("_prepareFormData");
       chai.expect(provider).to.respondTo("_prepareRequest");
       chai.expect(provider).to.respondTo("send");
-      chai.expect(provider).to.have.property("name", "sendgrid");
+      chai.expect(provider).to.have.property("name", "hawkeye");
+      chai.expect(provider).to.have.property("provider", "sendgrid");
       chai.expect(provider).to.have.property("apiKey", "sandboxedkey");
       chai.expect(provider).to.have.property("apiUser", "sandboxed");
       done();
@@ -97,8 +111,10 @@ describe("Sendgrid", function() {
         done("the test case should fail");
       } catch(error) {
         chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(BadRequestError);
         chai.expect(error).to.be.instanceof(ParameterInvalidError);
         chai.expect(error).to.have.property("code", "PARAM_INVALID");
+        chai.expect(error).to.have.property("status", 400);
         chai.expect(error.message).to.be.equal("`email` should be of an object of prototype HulkMailer.Email");
         done();
       }
@@ -174,7 +190,27 @@ describe("Sendgrid", function() {
   });
 
   describe("send()", function() {
-    it("should send email", function(done) {
+    it("should forbid if incorrect configurations passed", function(done) {
+      var invalidProvider = new Sendgrid(_.chain(config.email_providers[2]).clone().assign({ "username": "incorrectsandboxeduser" }).value());
+      var email = new Email({
+        "from": "anthonyj7458@gmail.com",
+        "to": "anthonyj7458+1@gmail.com",
+        "subject": "Hello Joseph Anthony",
+        "text": "Congratulations Joseph Anthony, you just sent an email!"
+      });
+      invalidProvider.send(email, function(error, success) {
+        chai.expect(error).to.be.instanceof(Error);
+        chai.expect(error).to.be.instanceof(ForbiddenError);
+        chai.expect(error).to.be.instanceof(ConfigurationInvalidError);
+        chai.expect(error).to.have.property("code", "CONFIG_INVALID");
+        chai.expect(error).to.have.property("status", 401);
+        chai.expect(error.message).to.be.equal("Configurations for [hawkeye] is forbidden.");
+        chai.expect(success).to.equal(false);
+        done();
+      });
+    });
+
+    it("should send Email", function(done) {
       var email = new Email({
         "from": "anthonyj7458@gmail.com",
         "to": ["anthonyj7458@gmail.com", "anthonyj7458+1@gmail.com"],
@@ -182,11 +218,10 @@ describe("Sendgrid", function() {
         "subject": "Hello Joseph Anthony",
         "text": "Congratulations Joseph Anthony, you just sent an email!"
       });
-      provider.send(email, function(result) {
-        if(result.error)
-          return done(result.error);
-        chai.expect(result.success).to.equal(true);
-        return done();
+      provider.send(email, function(error, success) {
+        chai.expect(error).to.equal(null);
+        chai.expect(success).to.equal(true);
+        done();
       });
     });
   });
