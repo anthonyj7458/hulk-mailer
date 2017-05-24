@@ -1,0 +1,17 @@
+POST /v3/sandboxed.domain.mailgun.org/messages
+content-type: application/x-www-form-urlencoded
+host: api.mailgun.net
+authorization: Basic YXBpOmtleS1pbmFjdGl2ZQ==
+accept: application/json
+body: from=%3Canthonyj7458%40gmail.com%3E&to=%3Canthonyj7458%2B2%40gmail.com%3E&subject=Hello%20Joseph%20Anthony&text=Congratulations%20Joseph%20Anthony%2C%20you%20just%20sent%20an%20email%21
+
+HTTP/1.1 400 BAD REQUEST
+content-type: application/json
+date: Tue, 23 May 2017 12:41:42 GMT
+server: nginx
+content-length: 137
+connection: Close
+
+{
+  "message": "Please activate your Mailgun account. Check your inbox or log in to your control panel to resend the activation email."
+}

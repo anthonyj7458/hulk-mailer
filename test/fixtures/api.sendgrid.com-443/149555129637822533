@@ -1,0 +1,14 @@
+POST /api/mail.send.json
+content-type: application/x-www-form-urlencoded
+host: api.sendgrid.com
+body: api_user=incorrectsandboxeduser&api_key=sandboxedkey&from=anthonyj7458@gmail.com&to[]=anthonyj7458+1@gmail.com&subject=Hello Joseph Anthony&text=Congratulations Joseph Anthony, you just sent an email!
+
+HTTP/1.1 400 Bad Request
+server: nginx
+date: Tue, 23 May 2017 14:54:56 GMT
+content-type: application/json
+content-length: 56
+connection: close
+x-frame-options: DENY
+
+{"errors":["Bad username / password"],"message":"error"}

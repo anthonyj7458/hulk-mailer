@@ -1,0 +1,16 @@
+POST /v3/sandboxed.domain.mailgun.org/messages
+content-type: application/x-www-form-urlencoded
+host: api.mailgun.net
+authorization: Basic YXBpOmtleS1pbmNvcnJlY3Q=
+accept: application/json
+body: from=%3Canthonyj7458%40gmail.com%3E&to=%3Canthonyj7458%2B1%40gmail.com%3E&subject=Hello%20Joseph%20Anthony&text=Congratulations%20Joseph%20Anthony%2C%20you%20just%20sent%20an%20email%21
+
+HTTP/1.1 401 UNAUTHORIZED
+content-type: text/html; charset=utf-8
+date: Tue, 23 May 2017 12:09:48 GMT
+server: nginx
+www-authenticate: Basic realm="MG API"
+content-length: 9
+connection: Close
+
+Forbidden

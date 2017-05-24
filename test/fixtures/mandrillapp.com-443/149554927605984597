@@ -1,0 +1,18 @@
+POST /api/1.0/messages/send.json
+content-type: application/x-www-form-urlencoded
+host: mandrillapp.com
+accept: application/json
+body: key=key-incorrect&message%5Bfrom_email%5D=anthonyj7458%40gmail.com&message%5Bto%5D%5B0%5D%5Bemail%5D=anthonyj7458%2B1%40gmail.com&message%5Bto%5D%5B0%5D%5Btype%5D=to&message%5Bsubject%5D=Hello%20Joseph%20Anthony&message%5Btext%5D=Congratulations%20Joseph%20Anthony%2C%20you%20just%20sent%20an%20email%21
+
+HTTP/1.1 500 Internal Server Error
+server: nginx/1.6.3
+date: Tue, 23 May 2017 14:21:16 GMT
+content-type: application/json; charset=utf-8
+transfer-encoding: chunked
+connection: close
+access-control-allow-origin: *
+access-control-allow-methods: POST, GET, OPTIONS
+access-control-allow-headers: Content-Type
+access-control-allow-credentials: false
+
+{"status":"error","code":-1,"name":"Invalid_Key","message":"Invalid API key"}
