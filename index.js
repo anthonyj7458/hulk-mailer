@@ -39,6 +39,11 @@ HulkMailer.send = function(email, sent) {
   manager.send(email, sent);
 }
 
+HulkMailer.sendByProvider = function(name, email, sent) {
+  isInitialized();
+  manager.sendByProvider(name, email, sent);
+}
+
 HulkMailer.Email = require("./lib/email");
 
 module.exports = HulkMailer;

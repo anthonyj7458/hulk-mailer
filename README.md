@@ -63,11 +63,11 @@ const config = [
 Initialize your config.
 ```js
 // ES5
-var HulkMailer = require('hulk-mailer');
+var HulkMailer = require("hulk-mailer");
 HulkMailer.init(config);
 
 // ES6
-import HulkMailer from 'hulk-mailer';
+import HulkMailer from "hulk-mailer";
 HulkMailer.init(config);
 ```
 
@@ -82,7 +82,7 @@ HulkMailer.addNewProvider({
 
 Remove a Provider if not required anymore.
 ```js
-HulkMailer.removeProvider('loki');
+HulkMailer.removeProvider("loki");
 ```
 
 ### Create and send your Email
@@ -94,6 +94,8 @@ const email = new HulkMailer.Email({
   "text": "Congratulations Joseph Anthony, you just sent an email!"
 });
 HulkMailer.send(email);
+// or
+HulkMailer.sendByProvider("thor", email);
 ```
 
 ### See our own [Implementation](https://github.com/anthonyj7458/hulk-service)
